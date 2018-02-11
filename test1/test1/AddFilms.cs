@@ -32,11 +32,6 @@ namespace test1
         private void AddFilms_Load(object sender, EventArgs e)
         {}
 
-
-        class Insert : AddFilms
-        {
-
-        }
         private void cancel_Click(object sender, EventArgs e)
         {
             Close();
@@ -44,6 +39,7 @@ namespace test1
 
         private void Add_Click(object sender, EventArgs e)
         {
+            
             SqlConnection conn = new SqlConnection("Data Source=UZZZY-ПК\\SQLEXPRESS;Initial Catalog=cinema;User ID=sa;Password=123"); //строка подключения
             SqlCommand command = new SqlCommand("", conn);
 
@@ -67,7 +63,7 @@ namespace test1
             conn.Close();
 
             // MessageBox.Show(dt_start.Value.ToString("yyyy-MM-dd"));
-
+            
             conn.Open();
 
             //Формирование запроса для добавления
@@ -82,5 +78,7 @@ namespace test1
 
             MessageBox.Show("Запись добавлена", "Оповещение", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
+
+
     }
 }
