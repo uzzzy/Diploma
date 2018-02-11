@@ -18,8 +18,9 @@ namespace test1
         public buyForm()
         {
             InitializeComponent();
-        }
 
+        }
+        //резервирование методов для полей таблиц
         class sql_data
         {
             public string name { get; set; }
@@ -43,21 +44,25 @@ namespace test1
             public string counts { get; set; }
             public string date { get; set; }
         }
-
+        //списки для хранения значения полей таблиц
         List<sql_data> sql_data_List = new List<sql_data> { };
         List<cash_list> sql_data_List_cash = new List<cash_list> { };
         List<report_list> sql_data_List_report = new List<report_list> { };
 
-        class work_Controls //класс work_Controls
+        //класс work_Controls
+        class work_Controls 
         {
-            //ниже идут методы внутри класса
-            public void create_DataGrid_columns() //метод для работы с гридом(сеткой)
+            //метод для работы с гридом(сеткой)
+            public void create_DataGrid_columns() 
             {
-                wm.dg_SqlData.ColumnCount = 6; //устанавливаем кол-во колонок
-
-                wm.dg_SqlData.Columns[0].Name = "name";          //имя колонки для доступа из кода(данная строка не обязательна)
-                wm.dg_SqlData.Columns[0].HeaderText = "Название фильма";               //Название заголовка
-                wm.dg_SqlData.Columns[0].DataPropertyName = "name";  //название поля из БД к которому будем привязывать данные при чтнеии из БД
+                //кол-во колонок
+                wm.dg_SqlData.ColumnCount = 6;
+                //имя колонки для доступа из кода
+                wm.dg_SqlData.Columns[0].Name = "name";
+                //Название заголовка       
+                wm.dg_SqlData.Columns[0].HeaderText = "Название фильма";
+                //название поля из БД к которому будем привязывать данные при чтнеии из БД              
+                wm.dg_SqlData.Columns[0].DataPropertyName = "name";  
                 wm.dg_SqlData.Columns[1].Name = "name_genre";          
                 wm.dg_SqlData.Columns[1].HeaderText = "Жанр";              
                 wm.dg_SqlData.Columns[1].DataPropertyName = "name_genre";
@@ -77,11 +82,14 @@ namespace test1
         
             public void create_dg_cash_columns()
             {
+                //кол-во колонок
                 wm.dg_cash.ColumnCount = 2;
-
-                wm.dg_cash.Columns[0].Name = "name";          //имя колонки для доступа из кода(данная строка не обязательна)
-                wm.dg_cash.Columns[0].HeaderText = "Название фильма";               //Название заголовка
-                wm.dg_cash.Columns[0].DataPropertyName = "name";  //название поля из БД к которому будем привязывать данные при чтнеии из БД
+                //имя колонки для доступа из кода
+                wm.dg_cash.Columns[0].Name = "name";          
+                //Название заголовка
+                wm.dg_cash.Columns[0].HeaderText = "Название фильма";
+                //название поля из БД к которому будем привязывать данные при чтнеии из БД             
+                wm.dg_cash.Columns[0].DataPropertyName = "name";  
                 wm.dg_cash.Columns[1].Name = "costs";
                 wm.dg_cash.Columns[1].HeaderText = "Сумма";
                 wm.dg_cash.Columns[1].DataPropertyName = "costs";
@@ -89,11 +97,14 @@ namespace test1
 
             public void create_dg_report_columns()
             {
+                //кол-во колонок
                 wm.dg_report.ColumnCount = 4;
-
-                wm.dg_report.Columns[0].Name = "name";          //имя колонки для доступа из кода(данная строка не обязательна)
-                wm.dg_report.Columns[0].HeaderText = "Название фильма";               //Название заголовка
-                wm.dg_report.Columns[0].DataPropertyName = "name";  //название поля из БД к которому будем привязывать данные при чтнеии из БД
+                //имя колонки для доступа из кода
+                wm.dg_report.Columns[0].Name = "name";
+                //Название заголовка
+                wm.dg_report.Columns[0].HeaderText = "Название фильма";
+                //название поля из БД к которому будем привязывать данные при чтнеии из БД                
+                wm.dg_report.Columns[0].DataPropertyName = "name"; 
                 wm.dg_report.Columns[1].Name = "costs";
                 wm.dg_report.Columns[1].HeaderText = "Сумма";
                 wm.dg_report.Columns[1].DataPropertyName = "costs";
@@ -108,106 +119,145 @@ namespace test1
 
         class work_SQL : buyForm //класс work_SQL
         {
-                //ниже идут(могут идти) объекты и переменные для работы класса
-                private static SqlConnection conn = new SqlConnection("Data Source=UZZZY-ПК\\SQLEXPRESS;Initial Catalog=cinema;User ID=sa;Password=123"); //строка подключения
-                private static SqlCommand command = new SqlCommand("", conn);  //создаем объект для выполнения комманд БД и присваиваем ему объект подключения(conn)
-                //ниже идут методы внутри класса
+            //строка подключения к базе данных
+            private static SqlConnection conn = new SqlConnection("Data Source=UZZZY-ПК\\SQLEXPRESS;Initial Catalog=cinema;User ID=sa;Password=123");
+            //создаем объект для выполнения комманд БД и присваиваем ему объект подключения(conn)
+            private static SqlCommand command = new SqlCommand("", conn);  
 
-                private string id_gen()
+            //метод извлечения идентификатора из таблицы "Жанр"
+            private string id_gen()
             {
                 string id_g = " ";
-
+                //подключение к БД
                 conn.Open();
-
+                //запрос на выборку данных
                 command.CommandText = "SELECT [id_genre] FROM [cinema].[dbo].[genres] WHERE [name_genre]='"
                     + cb_search.Text + "'";
-
+                //объект чтения данных
                 SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows) //если получена хоть одна строка в результате выполнения запроса
+                //запись данных из запроса
+                if (reader.HasRows) 
                 {
-                    while (reader.Read()) //начинаем цикл построчного чтения пока не будут считаны все строки
+                    while (reader.Read())
                     {
                         id_g = reader["id_genre"].ToString();
                     }
                 }
-
+                //закрытие подключения к БД
                 conn.Close();
-
+                //возвращение значения
                 return id_g;
             }
 
-            //Модуль вывода информации
-                
-            public void sql_select() // метод для реализации запроса на выборку данных из БД
+
+            private string id_film()
             {
-                conn.Open(); //открываем подключение к БД
-                command.CommandText = "SELECT [name],[name_genre],[dur],[premiere_s],[premiere_f],[film_cost] " +
-                    "FROM [cinema].[dbo].[films],[cinema].[dbo].[genres]"
-                    +"WHERE [cinema].[dbo].[genres].[id_genre]=[cinema].[dbo].[films].[id_genre]"+ search(comboBox1.SelectedIndex); //присваиваем текст SQL команды объекту выполнения команд
-                    
-                SqlDataReader reader = command.ExecuteReader(); //создаем объект чтения данных и сразу считываем в него все данные полученные в результате выполнения объекта command
-                if (reader.HasRows) //если получена хоть одна строка в результате выполнения запроса
+                string id_f = " ";
+                //подключение к БД
+                conn.Open();
+                //запрос на выборку данных
+                command.CommandText = "SELECT [id_film] FROM [cinema].[dbo].[films] WHERE [name_film]='"
+                    + dg_SqlData.SelectedRows.ToString() + "'";
+                //объект чтения данных
+                SqlDataReader reader = command.ExecuteReader();
+                //запись данных из запроса
+                if (reader.HasRows) 
                 {
-                    while (reader.Read()) //начинаем цикл построчного чтения пока не будут считаны все строки
+                    while (reader.Read()) 
                     {
-                        sql_data_List.Add(new sql_data
-                        {
-                            name = reader["name"].ToString(),
-                            name_genre = reader["name_genre"].ToString(),
-                            dur = reader["dur"].ToString(),
-                            premiere_s = reader["premiere_s"].ToString().Substring(0, 10),
-                            premiere_f = reader["premiere_f"].ToString().Substring(0, 10),
-                            film_cost = reader["film_cost"].ToString(),//заполняем наш список объектов для хранения данных из таблицы
-                        });
-                       
+                        id_f = reader["id_film"].ToString();
                     }
-                }               
-
-                conn.Close(); //закрываем подключение
-
-                wm.dg_SqlData.DataSource = sql_data_List;//присваиваем список гриду(сетке)
+                }
+                //закрытие подключения к БД
+                conn.Close();
+                //возвращение значения
+                return id_f;
             }
 
+
+            // метод для реализации запроса на выборку данных из БД
+            public void sql_select()
+            { 
+            
+                //подключение к БД
+                conn.Open(); 
+                command.CommandText = "SELECT [name],[name_genre],[dur],[premiere_s],[premiere_f],[film_cost] " +
+                    "FROM [cinema].[dbo].[films],[cinema].[dbo].[genres]"
+                    +"WHERE [cinema].[dbo].[genres].[id_genre]=[cinema].[dbo].[films].[id_genre]"+ search(comboBox1.SelectedIndex);
+                //объект чтения данных
+                SqlDataReader reader = command.ExecuteReader();
+                //запись данных из запроса
+                if (reader.HasRows) 
+                    while (reader.Read()) 
+                    {
+                        sql_data_List.Add(new sql_data
+                            {
+                                name = reader["name"].ToString(),
+                                name_genre = reader["name_genre"].ToString(),
+                                dur = reader["dur"].ToString(),
+                                premiere_s = reader["premiere_s"].ToString().Substring(0, 10),
+                                premiere_f = reader["premiere_f"].ToString().Substring(0, 10),
+                                film_cost = reader["film_cost"].ToString(),
+                            }                               
+                                );
+                       
+                    }
+                
+                //закрытие подключения к БД
+                conn.Close();
+                //присваивание списка гриду(таблице)
+                wm.dg_SqlData.DataSource = sql_data_List;
+            }
+
+            // метод для реализации запроса на выборку данных из БД
             public void sql_cash() 
             {
-                conn.Open(); //открываем подключение к БД
+                //подключение к БД
+                conn.Open();
+                //запрос на выборку данных
                 command.CommandText = "SELECT [name], SUM(cost) as [costs]"+
                 " FROM[cinema].[dbo].[costs],  [cinema].[dbo].[tickets],   [cinema].[dbo].[films],  [cinema].[dbo].[seats_in_halls] "+
                  "WHERE films.id_film=tickets.id_film and seats_in_halls.id_seat= tickets.id_seat and tickets.id_cost= costs.id_cost"+
-                " group by name"; //присваиваем текст SQL команды объекту выполнения команд
-
+                " group by name";
+                //объект чтения данных
                 SqlDataReader reader = command.ExecuteReader(); //создаем объект чтения данных и сразу считываем в него все данные полученные в результате выполнения объекта command
-                if (reader.HasRows) //если получена хоть одна строка в результате выполнения запроса
+                //запись данных из запроса
+                if (reader.HasRows) 
                 {
-                    while (reader.Read()) //начинаем цикл построчного чтения пока не будут считаны все строки
+                    while (reader.Read()) 
                     {
 
                         sql_data_List_cash.Add(new cash_list
                         {
                             name = reader["name"].ToString(),
                             costs = reader["costs"].ToString()
-                            });
+                        }
+                        
+                            );
                     }
                 }
-
-                conn.Close(); //закрываем подключение
-
-                wm.dg_cash.DataSource = sql_data_List_cash;//присваиваем список гриду(сетке)
+                //закрытие подключения к БД
+                conn.Close();
+                //присваивание списка гриду(таблице)
+                wm.dg_cash.DataSource = sql_data_List_cash;
             }
 
-            public void sql_report() // метод для реализации запроса на выборку данных из БД
+            // метод для реализации запроса на выборку данных из БД
+            public void sql_report()
             {
-                conn.Open(); //открываем подключение к БД
+                //подключение к БД
+                conn.Open();
+                //запрос на выборку данных
                 command.CommandText = "SELECT [name], SUM(cost) as [costs], count(n_ticket) as [count], [tickets].[date] "+
                     "FROM[cinema].[dbo].[costs], [cinema].[dbo].[tickets],  [cinema].[dbo].[films], [cinema].[dbo].[seats_in_halls] "+
                     "WHERE films.id_film=tickets.id_film and seats_in_halls.id_seat= tickets.id_seat and tickets.id_cost= costs.id_cost "+
-                    "group by name, [date]"; //присваиваем текст SQL команды объекту выполнения команд
-
-                SqlDataReader reader = command.ExecuteReader(); //создаем объект чтения данных и сразу считываем в него все данные полученные в результате выполнения объекта command
-                if (reader.HasRows) //если получена хоть одна строка в результате выполнения запроса
+                    "group by name, [date]"; 
+                //объект чтения данных
+                SqlDataReader reader = command.ExecuteReader();
+                //запись данных из запроса
+                if (reader.HasRows) 
                 {
-                    while (reader.Read()) //начинаем цикл построчного чтения пока не будут считаны все строки
+                    while (reader.Read()) 
                     {
 
                         sql_data_List_report.Add(new report_list
@@ -216,37 +266,69 @@ namespace test1
                             costs = reader["costs"].ToString(),
                             counts = reader["count"].ToString(),
                             date = reader["date"].ToString().Substring(0, 10)
-                        });
+                        }
+                            );
                     }
                 }
-
-                conn.Close(); //закрываем подключение
-
-                wm.dg_report.DataSource = sql_data_List_report;//присваиваем список гриду(сетке)
+                //закрытие подключения к БД
+                conn.Close();
+                //присваивание списка гриду(таблице)
+                wm.dg_report.DataSource = sql_data_List_report;
             }
 
             public void sql_update() // изменение данных В БД
             {
-                conn.Open();
+                
+               /* conn.Open();
 
+                
                 command.CommandText = "UPDATE [dbo].[cinema] " +
                                       "SET [field_name]='новая строка' " +
-                                      "WHERE [field_name]='искомая строка(ки)' ";
+                                      "WHERE [field_name]='"++"' ";
 
                 command.ExecuteNonQuery(); //выполняем команду без запроса (для команды отличной от SELECT, SqlDataReader не нужен)
-                conn.Close();
+                conn.Close();*/
             }
+
+            //метод извелечения идентификатора поля "Фильмы"
+            public string getIdFilm(string f)
+            {
+                string id_f = "";
+                //подключение к БД
+                conn.Open();
+                //запрос на выборку данных
+                command.CommandText = "SELECT [id_film] " +
+                                      "FROM [cinema].[dbo].[films]"+
+                                      "WHERE [name]='"+f+"' ";
+                //объект чтения данных
+                SqlDataReader reader = command.ExecuteReader();
+                //запись данных из запроса
+                if (reader.HasRows) 
+                {
+                    while (reader.Read()) 
+                    {
+                        id_f = reader["id_film"].ToString();
+                    }
+                }
+                //закрытие подключения к БД
+                conn.Close();
+                //возвращение значения
+                return id_f;
+
+            }
+
 
             public List<string> genress()
             {
                 List<string> res = new List<string> { };
-
-                conn.Open(); //открываем подключение к БД
+                //подключение к БД
+                conn.Open();
+                //запрос на выборку данных
                 command.CommandText = "SELECT [name_genre] " +
                                       "FROM [cinema].[dbo].[genres]";
-
+                //объект чтения данных
                 SqlDataReader reader = command.ExecuteReader();
-
+                //запись данных из запроса
                 if (reader.HasRows) //если получена хоть одна строка в результате выполнения запроса
                 {
                     while (reader.Read()) //начинаем цикл построчного чтения пока не будут считаны все строки
@@ -254,12 +336,13 @@ namespace test1
                         res.Add(reader["name_genre"].ToString());
                     }
                 }
-
+                //закрытие подключения к БД
                 conn.Close();
-
+                //возвращение значения
                 return res;
             }
 
+            //метод изменения фильтра поиска
             public string search(int a)
             {
 
@@ -292,20 +375,23 @@ namespace test1
                 }
                 return back;
             }
+
+           
         }
 
-        
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            wm = this; //присваиваем ссылке на объект главного окна сам объект главного окна
-
-            work_Controls w_Controls = new work_Controls(); //создаем объект класса для работы с контролами(компонентами) гридом(сеткой)
-            work_SQL w_SQL = new work_SQL();                //создаем объект класса для работы с SQL
-
-            w_Controls.create_DataGrid_columns();           //вызываем метод create_DataGrid_columns(который создает столбцы в гриде) из класса для работы с контролами(компонентами) 
-
-            w_SQL.sql_select();              //вызываем метод sql_select(который выполняет SQL команду на выборку данных и присваивает полученные данные в грид(сетку)) 
+            //присваивание ссылке на объект главного окна сам объект главного окна
+            wm = this;
+            //создание объекта класса для работы с контролами(компонентами) гридом(таблицей)
+            work_Controls w_Controls = new work_Controls();
+            //создание объекта класса для работы с SQL
+            work_SQL w_SQL = new work_SQL();
+            //вызывов метода create_DataGrid_columns(который создает столбцы в гриде) из класса для работы с контролами(компонентами) 
+            w_Controls.create_DataGrid_columns();
+            //вызываем метода sql_select(который выполняет SQL команду на выборку данных и присваивает полученные данные в грид(сетку)) 
+            w_SQL.sql_select();              
 
             wm.cb_search.DataSource = w_SQL.genress();
 
@@ -313,12 +399,11 @@ namespace test1
 
             w_SQL.sql_cash();
 
-
             w_Controls.create_dg_report_columns();       
 
             w_SQL.sql_report();
 
-
+            //заполнение таблицы по размеру элемента управления DataGridView
             wm.dg_SqlData.AutoSizeColumnsMode =
             DataGridViewAutoSizeColumnsMode.Fill;
             
@@ -327,7 +412,8 @@ namespace test1
 
             wm.dg_report.AutoSizeColumnsMode =
             DataGridViewAutoSizeColumnsMode.Fill;
-
+            
+            //формироваание элементов выбора места зрителя
             uint place = 1;
 
             for (int i = 0; i < 6; i++)
@@ -347,24 +433,21 @@ namespace test1
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)//Кнопка добавить
+        //Кнопка добавить
+        private void button1_Click(object sender, EventArgs e)
         {
             work_SQL w_SQL = new work_SQL();
             AddFilms Add = new AddFilms();
 
             Add.cb_genre.DataSource = w_SQL.genress();
             //Add.cb_genre.DisplayMember = "имя поля если их много";
-
             Add.ShowDialog();
+
             w_SQL.sql_select();
 
         }
-
-        private void button2_Click(object sender, EventArgs e)//Кнопка изменить
-        {
-
-        }
-
+        
+        //выбор фильтра поиска
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             tb_search.Visible = false;
@@ -386,6 +469,7 @@ namespace test1
             }
         }
 
+        //кнопка поиска
         private void bt_search_Click(object sender, EventArgs e)
         {
             work_SQL w_SQL = new work_SQL();
@@ -396,7 +480,22 @@ namespace test1
             MessageBox.Show(w_SQL.search(comboBox1.SelectedIndex).ToString());
         }
 
+        //Кнопка изменить
+        private void button2_Click(object sender, EventArgs e)
+        {
+            AddFilms Edit = new AddFilms();
+            Edit.Owner = this;
+            Edit.ShowDialog();
 
-
+        }
+        //выбор строки 
+        public void dg_SqlData_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            work_SQL w_SQL = new work_SQL();
+            string f_name = dg_SqlData.CurrentRow.Cells[0].Value.ToString();
+            string id_f = w_SQL.getIdFilm(f_name);
+            MessageBox.Show(w_SQL.getIdFilm(f_name));
+        }
+        
     }
 }
